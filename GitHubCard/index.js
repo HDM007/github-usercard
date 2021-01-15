@@ -1,8 +1,16 @@
+import axios from "axios";
+
+
 /*
   STEP 1: using axios, send a GET request to the following URL
     (replacing the placeholder with your Github name):
     https://api.github.com/users/<your name>
 */
+axios.get("https://api.github.com/users/hdm007").then((res) => {
+  const data = res.data;
+  gitHubCards.appendChild(yumYum(data))
+}).catch((res) => {console.log(res)
+})
 
 /*
   STEP 2: Inspect and study the data coming back, this is YOUR
@@ -28,7 +36,20 @@
     user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+const followersArray = ["tetondan",
+  "dustinmyers",
+  "justsml",
+  "luishrd",
+  "bigknell"];
+
+  followersArray.forEach((user => {
+    const username = `https://api.github.com/users/${user}`;
+    axios.get(username).then((response) => {
+      const data = response.data;
+      const card = yumYum(data);
+      gitHubCards.appendChild(card)
+    })
+  }))
 
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
@@ -49,6 +70,60 @@ const followersArray = [];
       </div>
     </div>
 */
+
+const gitHubCards = document.querySelector(".cards")
+
+function yumYum(object) {
+  const card = document.createElement("div")
+  const img = document.createElement("img")
+  const cardInfo = document.createElement("div")
+  const name = document.createElement("h3")
+  const userName = document.createElement("p")
+  const location = document.createElement("p")
+  const profile = document.createElement("p")
+  const link = document.createElement("a")
+  const followers = document.createElement("p")
+  const following = document.createElement("p")
+  const bio = document.createElement("p")
+
+  // attach classes 
+
+  card.classList.add("card")
+  cardInfo.classList.add("card-info")
+  name.classList.add("name")
+  userName.classList.add("username")
+
+  // add data
+  img.src = object.avatar_url
+  name.textContent = object.name
+  userName.textContent = object.login
+  location.textContent = `Location: ${object.location}`
+  profile.textContent = "Profile: "
+  link.textContent = object.html_url
+  followers.textContent = `Followers: ${object.followers}`
+  following.textContent = `Following: ${object.following}`
+  bio.textContent = `Bio: ${object.bio}`
+
+  //append elements
+  card.appendChild(img)
+  card.appendChild(cardInfo)
+  cardInfo.appendChild(name)
+  cardInfo.appendChild(userName)
+  cardInfo.appendChild(location)
+  cardInfo.appendChild(profile)
+  profile.appendChild(link)
+  cardInfo.appendChild(followers)
+  cardInfo.appendChild(following)
+  cardInfo.appendChild(bio)
+
+
+
+  return card
+}
+
+
+
+//gitHubCards.appendChild()
 
 /*
   List of LS Instructors Github username's:
